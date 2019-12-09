@@ -1,4 +1,4 @@
 git add .
-git commit -m "test"
+git commit -m "Update"
 git push origin master
 git push heroku master
