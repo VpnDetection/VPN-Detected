@@ -47,12 +47,13 @@ function BlackListIP(res)
       console.log('BlackListIP error:', bodyData1['message']);
     }
     else{
-      if(bodyData1['risk'] == 'normal'){
-        percent1 = '0'
+      if(bodyData1['risk'] == 'high'){
+        result += 50;
+        percent1 = '50'
+
         }
         else{
-          result += 50;
-          percent1 = '50'
+          percent1 = '0'
         }
         console.log('BlackListIP result is:', bodyData1['vpn_or_proxy']);
       }
