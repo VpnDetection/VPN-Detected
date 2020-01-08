@@ -73,7 +73,7 @@ function init(result){
   TimeZoneResult = '• Time Zone: ' + TimeZonep +'%' + ' - Compare client time zone with his system time zone.';
   HostField = '• "Host" Field: ' + Host +'%' + ' - Check "Host" IP header field is belongs to VPN or not.';
   MobileResult = '• IsMobile: ' + Mobilep +'%' + ' - Check if client using a mobile and compare with API result';
-  TorResult = '• IsTor: ' + Tor +'%' + " - Determine whether the client use 'Tor' browser";
+  TorResult = '• IsTor: ' + Tor +'%' + " - Determine whether the client using a 'Tor' browser";
 
   //Result//
   FinalResult = '• Result: ' + result +'%';
