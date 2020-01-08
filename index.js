@@ -24,7 +24,7 @@ function timeZone(result){
   }
 
 function isTor(result){
-
+  
   if (performance.now() % 100 !== 0) {
     Tor = 0;
   }
