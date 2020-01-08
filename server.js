@@ -22,7 +22,7 @@ app.get('/', function(req, res) {
     //ipClient = '104.248.140.7'; //VPN
     ipClient = '109.64.101.97'; //Real IP
     //ipClient = req.header('x-forwarded-for');
-    domain =  req.get('host');
+    domain =  req.get('host') + req.get('origin');
     console.log("Client Connected..");
     console.log(`Client IP: ${ipClient}`);
     console.log("----------------BlackListIP--------------------");
