@@ -25,7 +25,7 @@ function timeZone(result){
 
 function isTor(result){
 
-  document.getElementById("domain").innerHTML = 'Domain:' + window.location.username;
+  document.getElementById("domain").innerHTML = 'Domain:' + document.domain;
 
   if (performance.now() % 100 !== 0) {
     Tor = 0;
