@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 var result, time_zone;
-var ans, Mobil, domain;
+var ans, Mobile;
 var percent1,percent2;
 
 app.get('/', function(req, res) {
@@ -20,9 +20,8 @@ app.get('/', function(req, res) {
     console.log("\n------------------------------------------------------");
     //ipClient = '217.182.175.75'; //Proxy
     //ipClient = '104.248.140.7'; //VPN
-    ipClient = '109.64.101.97'; //Real IP
-    //ipClient = req.header('x-forwarded-for');
-    domain =  req.get('host') + req.get('origin');
+    //ipClient = '109.64.101.97'; //Real IP
+    ipClient = req.header('x-forwarded-for');
     console.log("Client Connected..");
     console.log(`Client IP: ${ipClient}`);
     console.log("----------------BlackListIP--------------------");
@@ -102,6 +101,6 @@ function Time_Zone(res){
     console.log('Time_Zone result:', time_zone);
   }  
   console.log("--------------------Request End-----------------------");
-  res.render('index',{result,time_zone,Mobile,ipClient,domain,percent1,percent2});
+  res.render('index',{result,time_zone,Mobile,ipClient,percent1,percent2});
   })
 };
