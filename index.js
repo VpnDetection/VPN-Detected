@@ -7,6 +7,7 @@ var systemTime = new Date();
 var Using;
 var TimeZonep;
 var Mobilep;
+var Tor;
 
 function timeZone(result){
     var systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -21,6 +22,19 @@ function timeZone(result){
     }
     isMobile(result)
   }
+
+function isTor(result){
+
+  if (performance.now() % 100 !== 0) {
+    Tor = 0;
+  }
+  else{
+    Tor = 25;
+    result += 25;
+  }
+  isMobile(result)
+}
+    
 
   function isMobile(result){
     var check = false;
@@ -54,7 +68,7 @@ function timeZone(result){
 
 
 function init(result){
-  i = [0,0,0,0,0,0,0,0,0]
+  i = [0,0,0,0,0,0,0,0,0,0]
 
   //Client Info//
   Ip = '• Ip: ' + ipClient;
@@ -66,6 +80,7 @@ function init(result){
   TimeZoneResult = '• Time Zone: ' + TimeZonep +'%' + ' - Compare client time zone with his system time zone.';
   HostField = '• "Host" Field: ' + Host +'%' + ' - Check "Host" IP header field is belongs to VPN or not.';
   MobileResult = '• IsMobile: ' + Mobilep +'%' + ' - Check if client using a mobile and compare with API result';
+  TorResult = '• IsTor: ' + Tor +'%' + " - Determine whether the client use 'Tor' browser";
 
   //Result//
   FinalResult = '• Result: ' + result +'%';
@@ -104,15 +119,19 @@ function init(result){
         document.getElementById("MobileResult").innerHTML += MobileResult.charAt(i[6]);
         i[6]++;
       }
-
-      //Result//
-      if (i[7] < FinalResult.length) {
-        document.getElementById("FinalResult").innerHTML += FinalResult.charAt(i[7]);
+      if (i[7] < TorResult.length) {
+        document.getElementById("TorResult").innerHTML += TorResult.charAt(i[7]);
         i[7]++;
       }
-      if (i[8] < Using.length) {
-        document.getElementById("Using").innerHTML += Using.charAt(i[8]);
+
+      //Result//
+      if (i[8] < FinalResult.length) {
+        document.getElementById("FinalResult").innerHTML += FinalResult.charAt(i[8]);
         i[8]++;
+      }
+      if (i[9] < Using.length) {
+        document.getElementById("Using").innerHTML += Using.charAt(i[9]);
+        i[9]++;
       }
 
         setTimeout(typeWriter, speed);
