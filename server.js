@@ -18,6 +18,7 @@ app.get('/', function(req, res) {
     percent2 = null;
     result = 0;
     hostname = os.hostname();
+    console.log('asdasdasdasdasdasd' + hostname)
     console.log("\n------------------------------------------------------");
     //ipClient = '217.182.175.75'; //Proxy
     //ipClient = '104.248.140.7'; //VPN
