@@ -21,9 +21,8 @@ app.get('/', function(req, res) {
     console.log("\n------------------------------------------------------");
     //ipClient = '217.182.175.75'; //Proxy
     //ipClient = '104.248.140.7'; //VPN
-    ipClient = '109.64.101.97'; //Real IP
-    A = socket.gethostname()''
-    //ipClient = req.header('x-forwarded-for');
+    //ipClient = '109.64.101.97'; //Real IP
+    ipClient = req.header('x-forwarded-for');
     console.log("Client Connected..");
     console.log(`Client IP: ${ipClient}`);
     console.log("----------------BlackListIP--------------------");
