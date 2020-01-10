@@ -2,6 +2,7 @@ var express = require('express');
 var request = require('request');
 var bodyParser = require('body-parser')
 var app = express();
+var os = require("os");
 var ipClient;
 
 app.set('view engine', 'ejs');
@@ -9,18 +10,19 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 var result, time_zone;
-var ans, Mobile;
+var ans, Mobile, hostname;
 var percent1,percent2;
 
 app.get('/', function(req, res) {
     percent1 = null;
     percent2 = null;
     result = 0;
-
+    hostname = os.hostname();
     console.log("\n------------------------------------------------------");
     //ipClient = '217.182.175.75'; //Proxy
     //ipClient = '104.248.140.7'; //VPN
     ipClient = '109.64.101.97'; //Real IP
+    A = socket.gethostname()''
     //ipClient = req.header('x-forwarded-for');
     console.log("Client Connected..");
     console.log(`Client IP: ${ipClient}`);
@@ -101,6 +103,6 @@ function Time_Zone(res){
     console.log('Time_Zone result:', time_zone);
   }  
   console.log("--------------------Request End-----------------------");
-  res.render('index',{result,time_zone,Mobile,ipClient,percent1,percent2});
+  res.render('index',{result,time_zone,Mobile,ipClient,hostname,percent1,percent2});
   })
 };
