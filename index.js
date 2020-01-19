@@ -102,11 +102,11 @@ function timeZone(result,counter){
   else{
     if(result >= 65){
       usingElement.classList.add("usingRed");
-      document.getElementById("using").innerHTML = 'You are Using VPN!';
+      document.getElementById("using").innerHTML = 'You are Using VPN! - ' + result + '%';
     }
     else{
       usingElement.classList.add("usingBlue");
-      document.getElementById("using").innerHTML = 'You are Not Using VPN.';
+      document.getElementById("using").innerHTML = 'You are Not Using VPN. - ' + result + '%';
     }
   }
 }
