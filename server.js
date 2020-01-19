@@ -1,32 +1,41 @@
 var express = require('express');
 var request = require('request');
+var geoip = require('geoip-lite');
+var CountryLanguage = require('country-language');
 var bodyParser = require('body-parser')
 var app = express();
-var os = require("os");
 var ipClient;
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-var result, time_zone;
-var ans, Mobile, hostname;
-var percent1,percent2;
+var result, accept_language, time, flag, time_zone;
+var country, fullCountry, answer, ans, counter;
+var hostColor,langColor;
+var check1,check4;
+var percentage1,percentage4;
+var isProxy, isTor, isVpn, isCrawler;
 
 app.get('/', function(req, res) {
-    percent1 = null;
-    percent2 = null;
+    percentage1 = 0;
+    percentage4 = 0;
+    counter = 0;
     result = 0;
-    hostname = os.hostname();
+    //console.log(JSON.stringify(req.headers));
     console.log("\n------------------------------------------------------");
     //ipClient = '217.182.175.75'; //Proxy
     //ipClient = '104.248.140.7'; //VPN
-    //ipClient = '109.64.101.97'; //Real IP
+    //ipClient = '109.64.87.92'; //Real IP
     ipClient = req.header('x-forwarded-for');
+    accept_language = req.header('accept-language');
+    country = geoip.lookup(ipClient)['country'];
+    time_zone = geoip.lookup(ipClient)['timezone'];
+    fullCountry = CountryLanguage.getCountry(country).name;
     console.log("Client Connected..");
     console.log(`Client IP: ${ipClient}`);
     console.log("----------------BlackListIP--------------------");
-    BlackListIP(res);
+    DetectionInfo(res);
 })
 
 let port = process.env.PORT;;
@@ -39,23 +48,19 @@ console.log("-------------------");
 app.use(express.static(__dirname + '/'));
 console.log("Server is running..");
 
-function BlackListIP(res)
+function DetectionInfo(res)
 {
-  request(`https://ip.teoh.io/api/vpn/${ipClient}`,function(error,response,body){
+  request(`https://www.ipqualityscore.com/api/json/ip/uglNEXB1BLgftt4M5FyKRFrpdRFk6t0W/${ipClient}`,function(error,response,body){
     var bodyData1 = JSON.parse(body);
-    if(error || bodyData1['message'] == 'IP Address is invalid.'){
-      console.log('BlackListIP error:', bodyData1['message']);
+    if(error || bodyData1['success'] == 'false'){
+      console.log('DetectionInfo error:', bodyData1['success']);
     }
     else{
-      if(bodyData1['risk'] == 'high'){
-        result += 35;
-        percent1 = '35'
-
-        }
-        else{
-          percent1 = '0'
-        }
-        console.log('BlackListIP result is:', bodyData1['vpn_or_proxy']);
+      isProxy = bodyData1['proxy']
+      isTor = bodyData1['tor']
+      isVpn = bodyData1['vpn']
+      isCrawler = bodyData1['is_crawler']
+        console.log('BlackListIP result - ', 'isProxy: ' + bodyData1['proxy'] + ' isTor: ' + bodyData1['tor'] + ' isVpn: ' + bodyData1['vpn'] + ' isCrawler: ' + bodyData1['is_crawler']);
       }
     console.log('1. Result is:', result);
     console.log("--------------------HostChecker-----------------------");
@@ -64,44 +69,98 @@ function BlackListIP(res)
 )};
 
 
+
 function HostChecker(res)
 {
    request(`https://www.ipqualityscore.com/api/json/ip/uglNEXB1BLgftt4M5FyKRFrpdRFk6t0W/${ipClient}`,function(error,response,body){
     var bodyData = JSON.parse(body);
     if(error || bodyData['success'] == false){
       console.log('HostChecker error:', bodyData['success']);
+      test1 = 'yellow';
+      check1 = 'Checking Error';
     }
     else{
-      Mobile = bodyData['mobile']
       ans = 0;
       ipNumbers = ipClient.split('.');
       replace = ipNumbers[0]+'-'+ipNumbers[1]+'-'+ipNumbers[2]+'-'+ipNumbers[3];
       ipNumbers.forEach(function (num) {ans += bodyData['host'].includes(num)})
       if(bodyData['host'] == ipClient || (bodyData['region'] == 'N\/A' && bodyData['city'] == 'N\/A') || !bodyData['host'].includes(replace) || ans < 4){
-          result += 15;
-          percent2 = '15'
+          check1 = 'Failed';
+          result += 10;
+          percentage1 = 10
+          hostColor = '#ff0000'
+          counter++;
         }
-      else{
-        percent2 = '0'
-      }
+        else{
+          check1 = 'Succeed';
+        }
         console.log('HostChecker result is:', bodyData['host'] + ' || Region: ' + bodyData['region'] + ' || City: ' + bodyData['city']);
       }
     console.log('2. Result is:', result);
-    console.log("---------------------Time_Zone------------------------");
-    Time_Zone(res);
+    console.log("------------------Country_Language--------------------");
+    Country_Language(res);
  })
 };
 
-function Time_Zone(res){
-  request(`https://api.ipgeolocation.io/timezone?apiKey=3f643672d11b4aff9c827233f1e5cb05&ip=${ipClient}`,function(error,response,body){
-  if(error || body.includes('not valid')){
-    time_zone = undefined;
+function Country_Language(res){
+  try {
+    console.log('iP_Country:',country);
+    console.log('Accepted_Language:', accept_language);
+  } catch (err) {'Country_Language Function Error!'; test3 = 'yellow'; check3 = 'Checking Error';}
+  request(`https://api.ipgeolocation.io/timezone?apiKey=3f643672d11b4aff9c827233f1e5cb05&tz=` + fullCountry ,function(error,response,body){
+  if(error || fullCountry == undefined){
+    time = undefined;
   }
   else{
-    time_zone = JSON.parse(body)['timezone'];
-    console.log('Time_Zone result:', time_zone);
+    time = JSON.parse(body)['time_24'];
   }  
+  
+  answer = 0;
+
+  CountryLanguage.getCountryLanguages(country, function (err, languages) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log('Languages: ',languages);
+      languages.forEach(function (languageCodes) {
+        console.log('#.', languageCodes.iso639_1);
+        if(languageCodes.iso639_1 == 'en'){
+        }
+        else{
+          answer += accept_language.includes(languageCodes.iso639_1);
+        }
+        })
+      }
+    })
+  console.log('Country_Language result:', answer);
+
+  if(!country || !accept_language){
+    console.log('Country_Language error: Country: ' + country + '  Accepted_Language: ' + accept_language);
+    test4 = 'yellow';
+    check4 = 'Checking Error';
+  }
+  else{
+    if(country == 'US'){
+      test4 = 'yellow';
+      check4 = 'Cannot check in US';
+    }
+    else{
+      if(answer == 0){
+        check4 = 'Failed';
+        result += 25;
+        percentage4 = 25
+        langColor = '#ff0000'
+        counter++;
+      }
+      else{
+        check4 = 'Succeed';
+    }
+  }
+}
+  console.log('3. Result is:', result);
   console.log("--------------------Request End-----------------------");
-  res.render('index',{result,time_zone,Mobile,ipClient,hostname,percent1,percent2});
-  })
+  flag = 'https://www.countryflags.io/' + country + '/shiny/24.png'
+  res.render('index',{result,time,country:fullCountry,flag,time_zone,ipClient,hostColor,langColor,check1,check4,percentage1,percentage4,isProxy,isTor,isVpn,isCrawler,counter});
+});
 };

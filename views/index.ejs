@@ -2,42 +2,226 @@
 <title>VPN-Detected</title>
 <meta name="description" content="Check Whatever You're Using VPN">
 <meta name="viewport" content="width=device-width, initial-scale=0.7">
-<!DOCTYPE html>
-<html>
-<body>
-    
-<div id="BlackListIP" style="display: none;"><%= percent1 %></div>
-<div id="Host" style="display: none;"><%= percent2 %></div>
+<meta property="og:title" content="VPN-Detected - Check Whatever You're Using VPN">
+<meta property="og:url" content="vpn-detected.herokuapp.com">
+<meta property="og:description" content="vpn-detected.herokuapp.com">
+<meta property="og:image" content="Images/icon.png">
+<meta property="og:type" content="article" />
+<meta property="og:locale" content="he_il" />
+<head>
+<link rel="stylesheet" type="text/css" href="index.css">
+<link rel="stylesheet" type="text/css" href="success.css">
+</head>
+<div id="localTime" style="display: none;"><%= time %></div>
 <div id="TimeZone" style="display: none;"><%= time_zone %></div>
-<div id="Mobile" style="display: none;"><%= Mobile %></div>
-<div id="Result" style="display: none;"><%= result %></div>
-<div id="ipClient" style="display: none;"><%= ipClient %></div>
+<body onload="compareLocalTime(<%= result %>,<%= counter %>)">
+<body>                 
+<h1>VPN-Detected</h1> 
+<h2>Leverages VPN activity using several methods</h2>  
+<p>&nbsp;</p> 
+<div class="chartBarsWrap">
+    <div class="chartBars chartBars1">
+        <ul class="numbers">
+            <li><span>25%</span></li>
+            <li><span>20%</span></li>
+            <li><span>15%</span></li>
+            <li><span>10%</span></li>
+            <li><span>5%</span></li>
+            <li><span>0%</span></li>
+        </ul>
+        <ul class="bars">
+            <li>
+                <span class="tooltip"> 
+                <span class="tooltipContent">Check 'Host' IP header field is belongs to VPN or not.</span>
+                <div data-percentage="<%= percentage1 %>" class="bar greenBar trigger"></div>
+                </span>
+                <b>'Host' Field</b>
+            </li>
+            <li>
+                <span class="tooltip">  
+                <span class="tooltipContent">Compare client location time with his system time.</span>
+                <div id="date_time" data-percentage="0" class="bar blueBar trigger"></div>
+                </span> 
+                <b>Date Time</b> 
+            </li>
+            <li>
+                <span class="tooltip"> 
+                <span class="tooltipContent">Compare client time zone with his system time zone.</span>
+                <div id="time_zone" data-percentage="0" class="bar orangeBar trigger"></div>
+                </span>
+                <b>Time  Zone</b>
+            </li>
+            <li>
+                <span class="tooltip"> 
+                <span class="tooltipContent">Check if client accepted languages is equal to his country languages.</span> 
+                <div data-percentage="<%= percentage4 %>" class="bar purpleBar trigger"></div>    
+                </span>
+                <b>Languages</b>   
+            </li>
+            <li>
+              <span class="tooltip"> 
+              <span class="tooltipContent">Determine whether the client using a 'Tor' browser.</span> 
+              <div id="tor" data-percentage="0" class="bar redBar trigger"></div>    
+              </span>
+              <b>isTor</b>   
+          </li>
+        </ul>
+    </div>
+</div>
 
-<h1>VPN-Detected</h1>
 
-<body onload="timeZone(<%= result %>)"></body>
+<br><div class="courses-container">
+	<div class="course">
+		<div class="course-preview">
+			<h6>Final Result</h6>
+			<h2>API Comparison</h2>
+		</div>
+		<div class="course-info">
+			<div class="progress-container">
+        <div class="progress"></div>
+        <div class="progressAfter" id='progress'></div>
+        <span class="progress-text" id='counter'></span>
+        <span class="progress-text">/ 5 Functions</span>
+      </div>
+      <h6 style='text-align: left; color: black; font-size: 14px;'>•isProxy: <%= isProxy %></h1>
+      <h6 style='text-align: left; color: black; font-size: 14px;'>•isTor: <%= isTor %></h6>
+      <h6 style='text-align: left; color: black; font-size: 14px;'>•isVpn: <%= isVpn %></h6>
+      <h6 style='text-align: left; color: black; font-size: 14px;'>•isCrawler: <%= isCrawler %></h6>
+			<h2 style='float: left; color: black;'>VPN-Detected Result:&nbsp;</h2><p style='text-align: left; margin-top:13px;' id='using'></p>
+		</div>
+	</div>
+</div>
 
-<h3>Client Info:</h3>
-<p id="Ip"></p>
-<p id="SysDate"></p>
-<p id="Timezone"></p>
+
+<ul class="surveys grid">
+  <li class="survey-item">    
+    <span class="survey-name">isTor</span>
+    
+      <span class="survey-progress">
+        <span class="survey-progress-bg">
+          <span class="survey-progress-fg" id="torFg"></span>
+        </span>
+        
+        <span class="survey-progress-labels">
+          <span class="survey-progress-label" id='torPercentage'>0%</span>
+          <span class="survey-completes" id="check5"></span>
+        </span>
+      </span>
+      
+       <span class="survey-end-date">
+        Determine whether the client using a 'Tor' browser.
+      </span>
+      <span class="survey-stage" id="torStage"></span>
+  </li>
+
+
+  <li class="survey-item" style="border-radius: 8px;">
+    <span class="survey-name">ip: <%= ipClient %></span>
+
+       <span class="survey-end-date">
+        <u>Sys Date</u>:  <span id="date"></span><br><br>
+        <u>Country ip</u>: <b><%= country %></b>&nbsp;<img class='country__flag' src="<%= flag %>" /><br>
+        <u>Time Zone</u>: <b><%= time_zone %></b>
+        </span>
+  </li>
+
+
+  <li class="survey-item">
+    <span class="survey-name">'Host' Field</span>
+
+      <span class="survey-progress">
+        <span class="survey-progress-bg">
+          <span class="survey-progress-fg" style="width: <%= percentage1 %>%; background: <%= langColor %>;"></span>
+        </span>
+        
+        <span class="survey-progress-labels">
+          <span class="survey-progress-label" style='color: <%= hostColor %>;'><%= percentage1 %>%</span>
+
+          <span class="survey-completes"><%= check1 %></span>
+        </span>
+      </span>
+      
+       <span class="survey-end-date">
+        Check 'Host' IP header field is belongs to VPN or not.
+        </span>
+        <span class="survey-stage" style="background: <%= hostColor %>;"></span>
+  </li>
+  <br>
+
+
+  <li class="survey-item">
+    <span class="survey-name">Accepted Languages</span>
+
+      <span class="survey-progress">
+        <span class="survey-progress-bg">
+          <span class="survey-progress-fg" style="width: <%= percentage4 %>%; background: <%= langColor %>;"></span>
+        </span>
+        
+        <span class="survey-progress-labels">
+          <span class="survey-progress-label" style='color: <%= langColor %>;'><%= percentage4 %>%</span>
+
+          <span class="survey-completes"><%= check4 %></span>
+        </span>
+      </span>
+      
+       <span class="survey-end-date">
+        Check if client accepted languages is equal to his country languages.
+        </span>
+        <span class="survey-stage" style="background: <%= langColor %>;"></span>
+  </li>
+
+
+  <li class="survey-item">
+    <span class="survey-name">Date Time</span>
+
+      <span class="survey-progress">
+        <span class="survey-progress-bg">
+          <span class="survey-progress-fg" id="dateFg"></span>
+        </span>
+        
+        <span class="survey-progress-labels">
+          <span class="survey-progress-label" id='datePercentage'>0%</span>
+
+          <span class="survey-completes" id="check2"></span>
+        </span>
+      </span>
+      
+       <span class="survey-end-date">
+        Compare client location time with his system time.
+        </span>
+        <span class="survey-stage" id="dateStage"></span>
+  </li>
+
+
+  <li class="survey-item">
+    <span class="survey-name">Time  Zone</span>
+
+      <span class="survey-progress">
+        <span class="survey-progress-bg">
+          <span class="survey-progress-fg" id="zoneFg"></span>
+        </span>
+        
+        <span class="survey-progress-labels">
+          <span class="survey-progress-label" id='zonePercentage'>0%</span>
+
+          <span class="survey-completes" id="check3"></span>
+        </span>
+      </span>
+      
+       <span class="survey-end-date">
+        Compare client time zone with his system time zone.
+        </span>
+        <span class="survey-stage" id="zoneStage"></span>
+  </li>
+</ul>  
+
+
 <br>
+<p style='color: #f5f5f5'>SCE-Team Copyright©</p>
 
-<h3>Functions:</h3>
-<p id="BlackListip"></p>
-<p id="TimeZoneResult"></p>
-<p id="HostField"></p>
-<p id="MobileResult"></p>
-<p id="TorResult"></p>
-<p>Hostname: <%= hostname %></p>
-<br>
-
-<h3>Final Result:</h3>
-<p id="FinalResult"></p>
-<p id="Using"></p>
-
+<script src='https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js'></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/packery/1.4.2/packery.pkgd.min.js'></script>
 <script type="text/javascript" src="index.js"></script>
-
 </body>
 </html>
-

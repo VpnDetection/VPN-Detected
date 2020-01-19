@@ -1,132 +1,126 @@
-var Host = document.getElementById("Host").innerHTML;
-var BlackListIP = document.getElementById("BlackListIP").innerHTML;
-var TimeZoneTxt = document.getElementById("TimeZone").innerHTML;
-var Mobile = document.getElementById("Mobile").innerHTML;
-var ipClient = document.getElementById("ipClient").innerHTML;
-var systemTime = new Date();
-var Using;
-var TimeZonep;
-var Mobilep;
-var Tor;
 
-function timeZone(result){
-    var systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    var ipTimeZone = document.getElementById("TimeZone").innerHTML;
+function compareLocalTime(result,counter) {
+  //document.getElementById("percentage4").innerHTML = '0';
+  var ipTime, systemTime, systemHour, systemMinutes, ipTimeSplit, ipHour, ipMinutes;
+
+  ipTime = String(document.getElementById('localTime').innerHTML);
+
+  systemTime = new Date();
+  document.getElementById('date').innerHTML = systemTime;
+
+  systemHour = systemTime.getHours().toString();
+  systemHour = ("0" + systemHour).slice(-2);
+
+  systemMinutes = systemTime.getMinutes().toString();
+  systemMinutes = ("0" + systemMinutes).slice(-2);
   
-    if(systemTimeZone == ipTimeZone){
-        TimeZonep = 0;
+  ipTimeSplit = ipTime.split(':');
+
+  ipHour = ipTimeSplit[0];
+  ipMinutes = ipTimeSplit[1];
+
+  if(!ipTime || !systemTime || !systemHour || !systemMinutes || !ipHour || !ipMinutes){
+    document.getElementById("check2").innerHTML = 'Checking Error';
+  }
+  else{
+    if(systemMinutes == '59' && ipMinutes == '00' && ipHour == Number(systemHour)+1){
+      document.getElementById("check2").innerHTML = 'Succeed';
     }
     else{
-        TimeZonep = 25;
-        result += 25;
+      if(systemHour==ipHour && (systemMinutes >= ipMinutes-2 && systemMinutes <= ipMinutes+5)){
+        document.getElementById("check2").innerHTML = 'Succeed';
+      }
+      else{
+        document.getElementById("check2").innerHTML = 'Failed';
+        document.getElementById("check2").innerHTML = 'Failed';
+        document.getElementById('date_time').setAttribute('data-percentage','20');
+        document.getElementById('datePercentage').innerHTML = '20%';
+        document.getElementById("datePercentage").setAttribute('style','color: #ff0000;');
+        document.getElementById("dateStage").setAttribute('style','background: #ff0000;');
+        document.getElementById("dateFg").setAttribute('style','width: 20%; background: #ff0000;');
+        counter++;
+        result += 20;
+      }
     }
-    isTor(result)
   }
+  isTor(result,counter)
+};
 
-function isTor(result){
-  
+function isTor(result,counter){
   if (performance.now() % 100 !== 0) {
     Tor = 0;
+    document.getElementById("check5").innerHTML = 'Succeed';
   }
   else{
     Tor = 25;
     result += 25;
+    counter++;
+    document.getElementById("check5").innerHTML = 'Failed';
+    document.getElementById('tor').setAttribute('data-percentage','20');
+    document.getElementById('torPercentage').innerHTML = '20%';
+    document.getElementById("torPercentage").setAttribute('style','color: #ff0000;');
+    document.getElementById("torStage").setAttribute('style','background: #ff0000;');
+    document.getElementById("torFg").setAttribute('style','width: 20%; background: #ff0000;');
   }
-  isMobile(result)
-}
-    
-
-function isMobile(result){
-  var check = false;
-  (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
-
-  if(check == true && window.innerWidth>768){
-    Mobilep = 25;
-    result += 25;
-  }
-  else{
-    Mobilep = 0;
-  }
-
-  if(result >= 50){
-  Using = '• Your Using VPN!';
-  }
-  else{
-  Using = '• Your Not Using VPN.';
-  }
-  init(result)
+  timeZone(result,counter)
 }
 
+function timeZone(result,counter){
+  //document.getElementById("percentage4").innerHTML = '0';
+  var usingElement = document.getElementById("using");
+  var systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  var ipTimeZone = document.getElementById("TimeZone").innerHTML;
 
-function init(result){
-  i = [0,0,0,0,0,0,0,0,0,0]
-
-  //Client Info//
-  Ip = '• Ip: ' + ipClient;
-  SysDate = '• Sys Date: ' + systemTime;
-  Timezone = '• Time Zone: ' + TimeZoneTxt;
-
-  //Fucntion//
-  BlackListip = '• BlackListIP: ' + BlackListIP +'%' + ' - Determine whether IP belongs to a hosting or VPN organization.';
-  TimeZoneResult = '• Time Zone: ' + TimeZonep +'%' + ' - Compare client time zone with his system time zone.';
-  HostField = '• "Host" Field: ' + Host +'%' + ' - Check "Host" IP header field is belongs to VPN or not.';
-  MobileResult = '• IsMobile: ' + Mobilep +'%' + ' - Check if client using a mobile and compare with API result';
-  TorResult = '• IsTor: ' + Tor +'%' + " - Determine whether the client using a 'Tor' browser";
-
-  //Result//
-  FinalResult = '• Result: ' + result +'%';
-
-  var speed = 150;
-
-  function typeWriter() {
-      //Client Info//
-      if (i[0] < Ip.length) {
-        document.getElementById("Ip").innerHTML += Ip.charAt(i[0]);
-        i[0]++;
-      }
-      if (i[1] < SysDate.length) {
-        document.getElementById("SysDate").innerHTML += SysDate.charAt(i[1]);
-        i[1]++;
-      }
-      if (i[2] < Timezone.length) {
-        document.getElementById("Timezone").innerHTML += Timezone.charAt(i[2]);
-        i[2]++;
-      }
-
-      //Fucntion//
-      if (i[3] < BlackListip.length) {
-        document.getElementById("BlackListip").innerHTML += BlackListip.charAt(i[3]);
-        i[3]++;
-      }
-      if (i[4] < TimeZoneResult.length) {
-        document.getElementById("TimeZoneResult").innerHTML += TimeZoneResult.charAt(i[4]);
-        i[4]++;
-      }
-      if (i[5] < HostField.length) {
-        document.getElementById("HostField").innerHTML += HostField.charAt(i[5]);
-        i[5]++;
-      }
-      if (i[6] < MobileResult.length) {
-        document.getElementById("MobileResult").innerHTML += MobileResult.charAt(i[6]);
-        i[6]++;
-      }
-      if (i[7] < TorResult.length) {
-        document.getElementById("TorResult").innerHTML += TorResult.charAt(i[7]);
-        i[7]++;
-      }
-
-      //Result//
-      if (i[8] < FinalResult.length) {
-        document.getElementById("FinalResult").innerHTML += FinalResult.charAt(i[8]);
-        i[8]++;
-      }
-      if (i[9] < Using.length) {
-        document.getElementById("Using").innerHTML += Using.charAt(i[9]);
-        i[9]++;
-      }
-
-        setTimeout(typeWriter, speed);
+  if(!systemTimeZone || !ipTimeZone){
+    document.getElementById("check3").innerHTML = 'Checking Error';
+  }
+  else{
+    if(systemTimeZone == ipTimeZone){
+      document.getElementById("check3").innerHTML = 'Succeed';
     }
+    else{
+      document.getElementById("check3").innerHTML = 'Failed';
+      document.getElementById('time_zone').setAttribute('data-percentage','20');
+      document.getElementById('zonePercentage').innerHTML = '20%';
+      document.getElementById("zonePercentage").setAttribute('style','color: #ff0000;');
+      document.getElementById("zoneStage").setAttribute('style','background: #ff0000;');
+      document.getElementById("zoneFg").setAttribute('style','width: 20%; background: #ff0000;');
+      counter++;
+      result += 20;
+    }
+  }
 
-    typeWriter()
+  document.getElementById("counter").innerHTML = counter;
+  document.getElementById("progress").setAttribute('style', 'width: ' + counter * 20 + '%');
+  Update();
+
+
+  if(document.getElementById("check2").innerHTML == 'Checking Error' && document.getElementById("check3").innerHTML == 'Checking Error'){
+    usingElement.classList.add("usingYellow");
+    document.getElementById("using").innerHTML = 'Checking Error!';
+  }
+  else{
+    if(result >= 65){
+      usingElement.classList.add("usingRed");
+      document.getElementById("using").innerHTML = 'You are Using VPN!';
+    }
+    else{
+      usingElement.classList.add("usingBlue");
+      document.getElementById("using").innerHTML = 'You are Not Using VPN.';
+    }
+  }
+}
+
+function Update(){
+  $(".trigger").each(function() {
+    $(this).each(function() {
+      var percentage = $(this).data("percentage");
+      $(this).css("height", percentage * 4 + "%"); 
+      $(this).prop("Counter", 0).animate(
+        {Counter: $(this).data("percentage")},{duration: 1800,easing: "swing",step: function(now) {
+          $(this).text(Math.ceil(now));
+        }
+      });
+    });
+  });
 }
