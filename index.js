@@ -1,6 +1,5 @@
 
 function compareLocalTime(result,counter) {
-  //document.getElementById("percentage4").innerHTML = '0';
   var ipTime, systemTime, systemHour, systemMinutes, ipTimeSplit, ipHour, ipMinutes;
 
   ipTime = String(document.getElementById('localTime').innerHTML);
@@ -20,7 +19,9 @@ function compareLocalTime(result,counter) {
   ipMinutes = ipTimeSplit[1];
 
   if(!ipTime || !systemTime || !systemHour || !systemMinutes || !ipHour || !ipMinutes){
-    document.getElementById("check2").innerHTML = 'Checking Error';
+    document.getElementById("check2").innerHTML = 'Error!';
+    document.getElementById("datePercentage").setAttribute('style','color: #e6c300;');
+    document.getElementById("dateStage").setAttribute('style','background: #e6c300;');
   }
   else{
     if(systemMinutes == '59' && ipMinutes == '00' && ipHour == Number(systemHour)+1){
@@ -31,7 +32,6 @@ function compareLocalTime(result,counter) {
         document.getElementById("check2").innerHTML = 'Succeed';
       }
       else{
-        document.getElementById("check2").innerHTML = 'Failed';
         document.getElementById("check2").innerHTML = 'Failed';
         document.getElementById('date_time').setAttribute('data-percentage','20');
         document.getElementById('datePercentage').innerHTML = '20%';
@@ -48,11 +48,9 @@ function compareLocalTime(result,counter) {
 
 function isTor(result,counter){
   if (performance.now() % 100 !== 0) {
-    Tor = 0;
     document.getElementById("check5").innerHTML = 'Succeed';
   }
   else{
-    Tor = 25;
     result += 25;
     counter++;
     document.getElementById("check5").innerHTML = 'Failed';
@@ -66,13 +64,13 @@ function isTor(result,counter){
 }
 
 function timeZone(result,counter){
-  //document.getElementById("percentage4").innerHTML = '0';
-  var usingElement = document.getElementById("using");
   var systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   var ipTimeZone = document.getElementById("TimeZone").innerHTML;
 
   if(!systemTimeZone || !ipTimeZone){
-    document.getElementById("check3").innerHTML = 'Checking Error';
+    document.getElementById("check3").innerHTML = 'Error!';
+    document.getElementById("zonePercentage").setAttribute('style','color: #e6c300;');
+    document.getElementById("zoneStage").setAttribute('style','background: #e6c300;');
   }
   else{
     if(systemTimeZone == ipTimeZone){
@@ -90,25 +88,25 @@ function timeZone(result,counter){
     }
   }
 
-  document.getElementById("counter").innerHTML = counter;
-  document.getElementById("progress").setAttribute('style', 'width: ' + counter * 20 + '%');
-  Update();
-
-
-  if(document.getElementById("check2").innerHTML == 'Checking Error' && document.getElementById("check3").innerHTML == 'Checking Error'){
-    usingElement.classList.add("usingYellow");
+  if(document.getElementById("check2").innerHTML == 'Error!' && document.getElementById("check3").innerHTML == 'Error!'){
+    document.getElementById("using").setAttribute('style','color: #e6c300;');
     document.getElementById("using").innerHTML = 'Checking Error!';
   }
   else{
     if(result >= 65){
-      usingElement.classList.add("usingRed");
+      document.getElementById("using").setAttribute('style','color: #ff0000;');
       document.getElementById("using").innerHTML = 'You are Using VPN!';
     }
     else{
-      usingElement.classList.add("usingBlue");
+      document.getElementById("using").setAttribute('style','color: #0071b3;');
       document.getElementById("using").innerHTML = 'You are Not Using VPN.';
     }
   }
+
+  document.getElementById("counter").innerHTML = counter;
+  document.getElementById("progress").setAttribute('style', 'width: ' + counter * 20 + '%');
+  Update();
+  findIP(addIP);
 }
 
 function Update(){
@@ -123,4 +121,47 @@ function Update(){
       });
     });
   });
+}
+
+
+
+function findIP(onNewIP) {
+  var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+  var pc = new myPeerConnection({iceServers: [{urls: "stun:stun.l.google.com:19302"}]}),
+    noop = function() {},
+    localIPs = {},
+    ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
+    key;
+
+  function ipIterate(ip) {
+    if (!localIPs[ip]) onNewIP(ip);
+    localIPs[ip] = true;
+  }
+  
+  pc.createDataChannel("");
+  
+  pc.createOffer(function(sdp) {
+    sdp.sdp.split('\n').forEach(function(line) {
+      if (line.indexOf('candidate') < 0) return;
+      line.match(ipRegex).forEach(ipIterate);
+    });
+    pc.setLocalDescription(sdp, noop, noop);
+  }, noop);
+  
+  pc.onicecandidate = function(ice) {
+    if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
+    ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
+  };
+}
+
+
+var ul = document.createElement('ul');
+ul.textContent = 'Your IPs are: '
+document.body.appendChild(ul);
+
+function addIP(ip) {
+  console.log('got ip: ', ip);
+  var li = document.createElement('li');
+  li.textContent = ip;
+  ul.appendChild(li);
 }

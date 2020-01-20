@@ -76,8 +76,8 @@ function HostChecker(res)
     var bodyData = JSON.parse(body);
     if(error || bodyData['success'] == false){
       console.log('HostChecker error:', bodyData['success']);
-      test1 = 'yellow';
-      check1 = 'Checking Error';
+      hostColor = '#e6c300';
+      check1 = 'Error!';
     }
     else{
       ans = 0;
@@ -137,13 +137,13 @@ function Country_Language(res){
 
   if(!country || !accept_language){
     console.log('Country_Language error: Country: ' + country + '  Accepted_Language: ' + accept_language);
-    test4 = 'yellow';
-    check4 = 'Checking Error';
+    langColor = '#e6c300';
+    check4 = 'Error!';
   }
   else{
     if(country == 'US'){
-      test4 = 'yellow';
-      check4 = 'Cannot check in US';
+      langColor = '#e6c300';
+      check4 = 'US Error!';
     }
     else{
       if(answer == 0){
