@@ -93,6 +93,7 @@ function HostChecker(res)
         }
         else{
           check1 = 'Succeed';
+          hostColor = '#8DC63F'
         }
         console.log('HostChecker result is:', bodyData['host'] + ' || Region: ' + bodyData['region'] + ' || City: ' + bodyData['city']);
       }
@@ -148,13 +149,14 @@ function Country_Language(res){
     else{
       if(answer == 0){
         check4 = 'Failed';
-        result += 25;
-        percentage4 = 25
+        result += 20;
+        percentage4 = 20
         langColor = '#ff0000'
         counter++;
       }
       else{
         check4 = 'Succeed';
+        langColor = '#8DC63F'
     }
   }
 }

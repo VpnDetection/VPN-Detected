@@ -15,10 +15,11 @@
 <div id="localTime" style="display: none;"><%= time %></div>
 <div id="TimeZone" style="display: none;"><%= time_zone %></div>
 <body onload="compareLocalTime(<%= result %>,<%= counter %>)">
-<body>                 
-<h1>VPN-Detected</h1> 
-<h2>Leverages VPN activity using several methods</h2>  
-<p>&nbsp;</p> 
+<body>
+<p id="david"></p>
+<h1>VPN-Detected</h1>
+<h2>Leverages VPN activity using several methods</h2>
+<p>&nbsp;</p>
 <div class="chartBarsWrap">
     <div class="chartBars chartBars1">
         <ul class="numbers">
@@ -31,39 +32,46 @@
         </ul>
         <ul class="bars">
             <li>
-                <span class="tooltip"> 
+                <span class="tooltip">
                 <span class="tooltipContent">Check 'Host' IP header field is belongs to VPN or not.</span>
                 <div data-percentage="<%= percentage1 %>" class="bar greenBar trigger"></div>
                 </span>
                 <b>'Host' Field</b>
             </li>
             <li>
-                <span class="tooltip">  
+                <span class="tooltip">
                 <span class="tooltipContent">Compare client location time with his system time.</span>
                 <div id="date_time" data-percentage="0" class="bar blueBar trigger"></div>
-                </span> 
-                <b>Date Time</b> 
+                </span>
+                <b>Date Time</b>
             </li>
             <li>
-                <span class="tooltip"> 
+                <span class="tooltip">
                 <span class="tooltipContent">Compare client time zone with his system time zone.</span>
                 <div id="time_zone" data-percentage="0" class="bar orangeBar trigger"></div>
                 </span>
                 <b>Time  Zone</b>
             </li>
             <li>
-                <span class="tooltip"> 
-                <span class="tooltipContent">Check if client accepted languages is equal to his country languages.</span> 
-                <div data-percentage="<%= percentage4 %>" class="bar purpleBar trigger"></div>    
+                <span class="tooltip">
+                <span class="tooltipContent">Check if client accepted languages is equal to his country languages.</span>
+                <div data-percentage="<%= percentage4 %>" class="bar purpleBar trigger"></div>
                 </span>
-                <b>Languages</b>   
+                <b>Languages</b>
             </li>
             <li>
-              <span class="tooltip"> 
-              <span class="tooltipContent">Determine whether the client using a 'Tor' browser.</span> 
-              <div id="tor" data-percentage="0" class="bar redBar trigger"></div>    
+              <span class="tooltip">
+              <span class="tooltipContent">Check if your VPN leaks your IP address via the WebRTC technology.</span>
+              <div id="WebRTC" data-percentage="0" class="bar blackBar trigger"></div>
               </span>
-              <b>isTor</b>   
+              <b>WebRTC</b>
+          </li>
+            <li>
+              <span class="tooltip">
+              <span class="tooltipContent">Determine whether the client using a 'Tor' browser.</span>
+              <div id="tor" data-percentage="0" class="bar redBar trigger"></div>
+              </span>
+              <b>isTor</b>
           </li>
         </ul>
     </div>
@@ -81,7 +89,7 @@
         <div class="progress"></div>
         <div class="progressAfter" id='progress'></div>
         <span class="progress-text" id='counter'></span>
-        <span class="progress-text">/ 5 Functions</span>
+        <span class="progress-text">/ 6 Functions</span>
       </div>
       <h6 style='text-align: left; color: black; font-size: 14px;'>•isProxy: <%= isProxy %></h1>
       <h6 style='text-align: left; color: black; font-size: 14px;'>•isTor: <%= isTor %></h6>
@@ -115,14 +123,25 @@
   </li>
 
 
-  <li class="survey-item" style="border-radius: 8px;">
-    <span class="survey-name">ip: <%= ipClient %></span>
+  <li class="survey-item">
+    <span class="survey-name">WebRTC</span>
 
-       <span class="survey-end-date">
-        <u>Sys Date</u>:  <span id="date"></span><br><br>
-        <u>Country ip</u>: <b><%= country %></b>&nbsp;<img class='country__flag' src="<%= flag %>" /><br>
-        <u>Time Zone</u>: <b><%= time_zone %></b>
+      <span class="survey-progress">
+        <span class="survey-progress-bg">
+          <span class="survey-progress-fg" id="rtcFg"></span>
         </span>
+        
+        <span class="survey-progress-labels">
+          <span class="survey-progress-label" id='rtcPercentage'>0%</span>
+
+          <span class="survey-completes" id="check6"></span>
+        </span>
+      </span>
+      
+       <span class="survey-end-date">
+        Check if your VPN leaks your IP address via the WebRTC technology.
+        </span>
+        <span class="survey-stage" id="rtcStage"></span>
   </li>
 
 
@@ -213,6 +232,17 @@
         </span>
         <span class="survey-stage" id="zoneStage"></span>
   </li>
+  <br>
+  <li class="survey-item" style="border-radius: 8px;">
+    <span class="survey-name" id="clientIP">ip: <%= ipClient %></span>
+
+       <span class="survey-end-date">
+        <u>Sys Date</u>:  <span id="date"></span><br><br>
+        <u>Country ip</u>: <b><%= country %></b>&nbsp;<img class='country__flag' src="<%= flag %>" /><br>
+        <u>Time Zone</u>: <b><%= time_zone %></b>
+        </span>
+  </li>
+
 </ul>  
 
 
