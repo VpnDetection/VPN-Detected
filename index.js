@@ -125,14 +125,14 @@ function WebRTC(result,counter){
   };
 
   function check(){
-
+    
     if(!realIP){
       document.getElementById("check6").innerHTML = 'Error!';
       document.getElementById("rtcPercentage").setAttribute('style','color: #e6c300;');
       document.getElementById("rtcStage").setAttribute('style','background: #e6c300;');
     }
     else{
-      document.getElementById("realIP").innerHTML = 'Real ip: ' + realIP;
+      document.getElementById("realIP").innerHTML = '<u>real</u> ip: ' + realIP;
       if (realIP == clientIP) {
         document.getElementById("check6").innerHTML = 'Succeed';
       }
