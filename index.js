@@ -133,7 +133,7 @@ function WebRTC(result,counter){
     }
     else{
       document.getElementById("realIP").innerHTML = 'Real ip: ' + realIP;
-      if (realIP != clientIP) {
+      if (realIP == clientIP) {
         document.getElementById("check6").innerHTML = 'Succeed';
       }
       else{
