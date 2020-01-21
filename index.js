@@ -126,27 +126,28 @@ function WebRTC(result,counter){
 
   function check(){
 
-    $.get(
-      "https://www.ipqualityscore.com/api/json/ip/uglNEXB1BLgftt4M5FyKRFrpdRFk6t0W/" + realIP,
-      {paramOne : 1, paramX : 'abc'},
-      function(data) {
-         alert('page content: ' + data);
-      }
-  );
-
-    if (realIP == clientIP) {
-      document.getElementById("check6").innerHTML = 'Succeed';
+    if(!realIP){
+      document.getElementById("check6").innerHTML = 'Error!';
+      document.getElementById("rtcPercentage").setAttribute('style','color: #e6c300;');
+      document.getElementById("rtcStage").setAttribute('style','background: #e6c300;');
     }
     else{
-      result += 20;
-      counter++;
-      document.getElementById("check6").innerHTML = 'Failed';
-      document.getElementById('WebRTC').setAttribute('data-percentage','20');
-      document.getElementById('rtcPercentage').innerHTML = '20%';
-      document.getElementById("rtcPercentage").setAttribute('style','color: #ff0000;');
-      document.getElementById("rtcStage").setAttribute('style','background: #ff0000;');
-      document.getElementById("rtcFg").setAttribute('style','width: 20%; background: #ff0000;');
+      document.getElementById("realIP").innerHTML = 'Real ip: ' + realIP;
+      if (realIP != clientIP) {
+        document.getElementById("check6").innerHTML = 'Succeed';
+      }
+      else{
+        result += 20;
+        counter++;
+        document.getElementById("check6").innerHTML = 'Failed';
+        document.getElementById('WebRTC').setAttribute('data-percentage','20');
+        document.getElementById('rtcPercentage').innerHTML = '20%';
+        document.getElementById("rtcPercentage").setAttribute('style','color: #ff0000;');
+        document.getElementById("rtcStage").setAttribute('style','background: #ff0000;');
+        document.getElementById("rtcFg").setAttribute('style','width: 20%; background: #ff0000;');
+      }
     }
+
     Update(result,counter);
   }
 }
