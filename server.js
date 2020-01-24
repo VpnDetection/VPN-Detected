@@ -10,7 +10,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
-var result, accept_language, time, flag, time_zone;
+var result, accept_language, time, flag, time_zone, errors;
 var country, fullCountry, answer, ans, counter;
 var hostColor,langColor;
 var check1,check4;
@@ -22,6 +22,7 @@ app.get('/', function(req, res) {
     percentage4 = 0;
     counter = 0;
     result = 0;
+    errors = 0;
     //console.log(JSON.stringify(req.headers));
     console.log("\n------------------------------------------------------");
     //ipClient = '217.182.175.75'; //Proxy
@@ -34,7 +35,7 @@ app.get('/', function(req, res) {
     fullCountry = CountryLanguage.getCountry(country).name;
     console.log("Client Connected..");
     console.log(`Client IP: ${ipClient}`);
-    console.log("----------------BlackListIP--------------------");
+    console.log("----------------DetectionInfo--------------------");
     DetectionInfo(res);
 })
 
@@ -60,14 +61,13 @@ function DetectionInfo(res)
       isTor = bodyData1['tor']
       isVpn = bodyData1['vpn']
       isCrawler = bodyData1['is_crawler']
-        console.log('BlackListIP result - ', 'isProxy: ' + bodyData1['proxy'] + ' isTor: ' + bodyData1['tor'] + ' isVpn: ' + bodyData1['vpn'] + ' isCrawler: ' + bodyData1['is_crawler']);
+        console.log('DetectionInfo result - ', 'isProxy: ' + bodyData1['proxy'] + ' isTor: ' + bodyData1['tor'] + ' isVpn: ' + bodyData1['vpn'] + ' isCrawler: ' + bodyData1['is_crawler']);
       }
     console.log('1. Result is:', result);
     console.log("--------------------HostChecker-----------------------");
     HostChecker(res);
   }
 )};
-
 
 
 function HostChecker(res)
@@ -78,6 +78,7 @@ function HostChecker(res)
       console.log('HostChecker error:', bodyData['success']);
       hostColor = '#e6c300';
       check1 = 'Error!';
+      errors++;
     }
     else{
       ans = 0;
@@ -103,11 +104,12 @@ function HostChecker(res)
  })
 };
 
+
 function Country_Language(res){
   try {
     console.log('iP_Country:',country);
     console.log('Accepted_Language:', accept_language);
-  } catch (err) {'Country_Language Function Error!'; test3 = 'yellow'; check3 = 'Checking Error';}
+  } catch (err) {'Country_Language Function Error!'; langColor = '#e6c300'; check4 = 'Error!'; errors++;}
   request(`https://api.ipgeolocation.io/timezone?apiKey=3f643672d11b4aff9c827233f1e5cb05&tz=` + fullCountry ,function(error,response,body){
   if(error || fullCountry == undefined){
     time = undefined;
@@ -140,11 +142,13 @@ function Country_Language(res){
     console.log('Country_Language error: Country: ' + country + '  Accepted_Language: ' + accept_language);
     langColor = '#e6c300';
     check4 = 'Error!';
+    errors++;
   }
   else{
     if(country == 'US'){
       langColor = '#e6c300';
       check4 = 'US Error!';
+      errors++;
     }
     else{
       if(answer == 0){
@@ -163,6 +167,7 @@ function Country_Language(res){
   console.log('3. Result is:', result);
   console.log("--------------------Request End-----------------------");
   flag = 'https://www.countryflags.io/' + country + '/shiny/24.png'
-  res.render('index',{result,time,country:fullCountry,flag,time_zone,ipClient,hostColor,langColor,check1,check4,percentage1,percentage4,isProxy,isTor,isVpn,isCrawler,counter});
+  res.render('index',{result,time,country:fullCountry,flag,time_zone,ipClient,hostColor,langColor
+                    ,check1,check4,percentage1,percentage4,isProxy,isTor,isVpn,isCrawler,counter,errors});
 });
 };

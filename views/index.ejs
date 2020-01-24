@@ -14,9 +14,10 @@
 </head>
 <div id="localTime" style="display: none;"><%= time %></div>
 <div id="TimeZone" style="display: none;"><%= time_zone %></div>
-<body onload="compareLocalTime(<%= result %>,<%= counter %>)">
+<div id="Result" style="display: none;"><%= result %></div>
+<div id="Counter" style="display: none;"><%= counter %></div>
+<div id="Errors" style="display: none;"><%= errors %></div>
 <body>
-<p id="david"></p>
 <h1>VPN-Detected</h1>
 <h2>Leverages VPN activity using several methods</h2>
 <p>&nbsp;</p>
@@ -88,7 +89,7 @@
 			<div class="progress-container">
         <div class="progress"></div>
         <div class="progressAfter" id='progress'></div>
-        <span class="progress-text" id='counter'></span>
+        <span class="progress-text" id='count'></span>
         <span class="progress-text">/ 6 Functions</span>
       </div>
       <h6 style='text-align: left; color: black; font-size: 14px;'>•isProxy: <%= isProxy %></h1>
@@ -235,10 +236,10 @@
   <br>
   <li class="survey-item" style="border-radius: 8px;">ip:
     <span class="survey-name" style="display:inline" id="clientIP"><%= ipClient %></span>
-    <span class="survey-name" id="realIP"></span>
+    <span class="survey-name" id="leakedIPs"></span>
 
        <span class="survey-end-date">
-        <u>Sys Date</u>:  <span id="date"></span><br><br>
+        <u>Sys Date</u>:  <span id="date"></span><br>
         <u>Country ip</u>: <b><%= country %></b>&nbsp;<img class='country__flag' src="<%= flag %>" /><br>
         <u>Time Zone</u>: <b><%= time_zone %></b>
         </span>

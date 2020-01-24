@@ -1,5 +1,9 @@
+var result = document.getElementById('Result').innerHTML;
+var counter = document.getElementById('Counter').innerHTML;
+var errors = document.getElementById('Errors').innerHTML;
 
-function compareLocalTime(result,counter) {
+
+function localTime() {
   var ipTime, systemTime, systemHour, systemMinutes, ipTimeSplit, ipHour, ipMinutes;
 
   ipTime = String(document.getElementById('localTime').innerHTML);
@@ -22,6 +26,7 @@ function compareLocalTime(result,counter) {
     document.getElementById("check2").innerHTML = 'Error!';
     document.getElementById("datePercentage").setAttribute('style','color: #e6c300;');
     document.getElementById("dateStage").setAttribute('style','background: #e6c300;');
+    errors++;
   }
   else{
     if(systemMinutes == '59' && ipMinutes == '00' && ipHour == Number(systemHour)+1){
@@ -43,10 +48,10 @@ function compareLocalTime(result,counter) {
       }
     }
   }
-  timeZone(result,counter)
 };
 
-function timeZone(result,counter){
+
+function timeZone(){
   var systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   var ipTimeZone = document.getElementById("TimeZone").innerHTML;
 
@@ -54,6 +59,7 @@ function timeZone(result,counter){
     document.getElementById("check3").innerHTML = 'Error!';
     document.getElementById("zonePercentage").setAttribute('style','color: #e6c300;');
     document.getElementById("zoneStage").setAttribute('style','background: #e6c300;');
+    errors++;
   }
   else{
     if(systemTimeZone == ipTimeZone){
@@ -70,10 +76,10 @@ function timeZone(result,counter){
       result += 15;
     }
   }
-  isTor(result,counter)
 }
 
-function isTor(result,counter){
+
+function isTor(){
   if (performance.now() % 100 !== 0) {
     document.getElementById("check5").innerHTML = 'Succeed';
   }
@@ -87,13 +93,10 @@ function isTor(result,counter){
     document.getElementById("torStage").setAttribute('style','background: #ff0000;');
     document.getElementById("torFg").setAttribute('style','width: 20%; background: #ff0000;');
   }
-
-  WebRTC(result,counter)
 }
 
 
-function WebRTC(result,counter){
-  var realIP;
+function WebRTC(){
   var clientIP = document.getElementById("clientIP").innerHTML;
   var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
   var pc = new myPeerConnection({iceServers: [{urls: "stun:stun.l.google.com:19302"}]}),
@@ -120,20 +123,18 @@ function WebRTC(result,counter){
   pc.onicecandidate = function(ice) {
     if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
     ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
-    realIP = Object.keys(localIPs)[0];
     check();
   };
 
   function check(){
-    
-    if(!realIP){
+    if(!Object.keys(localIPs)[0] && !Object.keys(localIPs)[1]){
       document.getElementById("check6").innerHTML = 'Error!';
       document.getElementById("rtcPercentage").setAttribute('style','color: #e6c300;');
       document.getElementById("rtcStage").setAttribute('style','background: #e6c300;');
+      errors++;
     }
     else{
-      document.getElementById("realIP").innerHTML = '<u>real</u> ip: ' + realIP;
-      if (realIP == clientIP) {
+      if (clientIP == Object.keys(localIPs)[0] || clientIP == Object.keys(localIPs)[1]) {
         document.getElementById("check6").innerHTML = 'Succeed';
       }
       else{
@@ -145,16 +146,19 @@ function WebRTC(result,counter){
         document.getElementById("rtcPercentage").setAttribute('style','color: #ff0000;');
         document.getElementById("rtcStage").setAttribute('style','background: #ff0000;');
         document.getElementById("rtcFg").setAttribute('style','width: 20%; background: #ff0000;');
+        document.getElementById("leakedIPs").innerHTML = "<u>leaked</u> ip's: " + Object.keys(localIPs)[0];
+        if(Object.keys(localIPs)[1] != '0.0.0.0'){
+          document.getElementById("leakedIPs").innerHTML += ' / ' + Object.keys(localIPs)[1];
+        }
       }
     }
-
-    Update(result,counter);
+    Update();
   }
 }
 
 
-function Update(result,counter){
-  if(document.getElementById("check2").innerHTML == 'Error!' && document.getElementById("check3").innerHTML == 'Error!'){
+function Update(){
+  if(errors >= 3){
     document.getElementById("using").setAttribute('style','color: #e6c300;');
     document.getElementById("using").innerHTML = 'Checking Error!';
   }
@@ -169,7 +173,7 @@ function Update(result,counter){
     }
   }
 
-  document.getElementById("counter").innerHTML = counter;
+  document.getElementById("count").innerHTML = counter;
   document.getElementById("progress").setAttribute('style', 'width: ' + counter * 100/6 + '%');
 
   $(".trigger").each(function() {
@@ -185,4 +189,7 @@ function Update(result,counter){
   });
 }
 
-
+WebRTC();
+localTime();
+timeZone();
+isTor();
