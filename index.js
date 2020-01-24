@@ -48,6 +48,7 @@ function localTime() {
       }
     }
   }
+  timeZone();
 };
 
 
@@ -76,6 +77,7 @@ function timeZone(){
       result += 15;
     }
   }
+  isTor();
 }
 
 
@@ -93,6 +95,7 @@ function isTor(){
     document.getElementById("torStage").setAttribute('style','background: #ff0000;');
     document.getElementById("torFg").setAttribute('style','width: 20%; background: #ff0000;');
   }
+  WebRTC();
 }
 
 
@@ -189,7 +192,5 @@ function Update(){
   });
 }
 
-WebRTC();
 localTime();
-timeZone();
-isTor();
+
