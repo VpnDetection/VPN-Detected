@@ -107,10 +107,10 @@ function WebRTC(){
     localIPs = {},
     ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
     key;
-    document.getElementById("A").innerHTML = window.RTCPeerConnection;
-    document.getElementById("B").innerHTML = window.mozRTCPeerConnection;
-    document.getElementById("C").innerHTML = window.webkitRTCPeerConnection;
-    document.getElementById("D").innerHTML = iceServers;
+    document.getElementById("A").innerHTML = 'A: ' + window.RTCPeerConnection;
+    document.getElementById("B").innerHTML = 'B: ' + window.mozRTCPeerConnection;
+    document.getElementById("C").innerHTML = 'C: ' + window.webkitRTCPeerConnection;
+    document.getElementById("D").innerHTML = 'D: ' + iceServers;
 
   function ipIterate(ip) {
     if (!localIPs[ip]);
@@ -128,7 +128,6 @@ function WebRTC(){
   }, noop);
   
   pc.onicecandidate = function(ice) {
-    document.getElementById("A").innerHTML = 'Enter A';
     if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
     ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
     check()
