@@ -100,6 +100,7 @@ function isTor(){
 
 
 function WebRTC(){
+  var flag = 0;
   var clientIP = document.getElementById("clientIP").innerHTML;
   var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
   var pc = new myPeerConnection({iceServers: [{urls: "stun:stun.l.google.com:19302"}]}),
@@ -127,8 +128,11 @@ function WebRTC(){
     document.getElementById("A").innerHTML = 'Enter A';
     if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
     ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
-    check();
+    flag = 1;
   };
+
+  if(flag == 1){check()}
+  else{check()}
 
   function check(){
     if(!Object.keys(localIPs)[0] && !Object.keys(localIPs)[1]){
