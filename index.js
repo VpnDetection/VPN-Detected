@@ -128,7 +128,7 @@ function WebRTC(){
     };
   }
   catch(err){
-    console.log(err);
+    document.getElementById("david").innerHTML = err;
   }
 
   function check(){
