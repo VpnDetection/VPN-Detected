@@ -100,7 +100,6 @@ function isTor(){
 
 
 function WebRTC(){
-  var flag = 0;
   var clientIP = document.getElementById("clientIP").innerHTML;
   var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
   var pc = new myPeerConnection({iceServers: [{urls: "stun:stun.l.google.com:19302"}]}),
@@ -108,6 +107,10 @@ function WebRTC(){
     localIPs = {},
     ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
     key;
+    document.getElementById("A").innerHTML = window.RTCPeerConnection;
+    document.getElementById("B").innerHTML = window.mozRTCPeerConnection;
+    document.getElementById("C").innerHTML = window.webkitRTCPeerConnection;
+    document.getElementById("D").innerHTML = iceServers;
 
   function ipIterate(ip) {
     if (!localIPs[ip]);
@@ -128,11 +131,8 @@ function WebRTC(){
     document.getElementById("A").innerHTML = 'Enter A';
     if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
     ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
-    flag = 1;
+    check()
   };
-
-  if(flag == 1){check()}
-  else{check()}
 
   function check(){
     if(!Object.keys(localIPs)[0] && !Object.keys(localIPs)[1]){
