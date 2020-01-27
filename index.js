@@ -107,12 +107,11 @@ function WebRTC(){
     localIPs = {},
     ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
     key;
-    document.getElementById("A").innerHTML = 'pc: ' + pc +  'myPeerConnection: ' + myPeerConnection;
+    if(!myPeerConnection || !pc){check()}
 
   function ipIterate(ip) {
     if (!localIPs[ip]);
     localIPs[ip] = true;
-    document.getElementById("B").innerHTML = 'Enter - B';
   }
   
   pc.createDataChannel("");
@@ -123,13 +122,12 @@ function WebRTC(){
       line.match(ipRegex).forEach(ipIterate);
     });
     pc.setLocalDescription(sdp, noop, noop);
-    document.getElementById("C").innerHTML = 'Enter - C';
   }, noop);
   
   pc.onicecandidate = function(ice) {
     if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
     ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
-    document.getElementById("D").innerHTML = 'Enter - D';
+    check();
   };
 
   function check(){
