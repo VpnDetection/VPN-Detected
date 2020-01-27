@@ -48,7 +48,6 @@ function localTime() {
       }
     }
   }
-  timeZone();
 };
 
 
@@ -77,7 +76,6 @@ function timeZone(){
       result += 15;
     }
   }
-  isTor();
 }
 
 
@@ -95,39 +93,43 @@ function isTor(){
     document.getElementById("torStage").setAttribute('style','background: #ff0000;');
     document.getElementById("torFg").setAttribute('style','width: 20%; background: #ff0000;');
   }
-  WebRTC();
 }
 
 
 function WebRTC(){
   var clientIP = document.getElementById("clientIP").innerHTML;
-  var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-  var pc = new myPeerConnection({iceServers: [{urls: "stun:stun.l.google.com:19302"}]}),
-    noop = function() {},
-    localIPs = {},
-    ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
-    key;
-
-  function ipIterate(ip) {
-    if (!localIPs[ip]);
-    localIPs[ip] = true;
+  try{
+    var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+    var pc = new myPeerConnection({iceServers: [{urls: "stun:stun.l.google.com:19302"}]}),
+      noop = function() {},
+      localIPs = {},
+      ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
+      key;
+  
+    function ipIterate(ip) {
+      if (!localIPs[ip]);
+      localIPs[ip] = true;
+    }
+    
+    pc.createDataChannel("");
+    
+    pc.createOffer(function(sdp) {
+      sdp.sdp.split('\n').forEach(function(line) {
+        if (line.indexOf('candidate') < 0) return;
+        line.match(ipRegex).forEach(ipIterate);
+      });
+      pc.setLocalDescription(sdp, noop, noop);
+    }, noop);
+    
+    pc.onicecandidate = function(ice) {
+      if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
+      ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
+      check();
+    };
   }
-  
-  pc.createDataChannel("");
-  
-  pc.createOffer(function(sdp) {
-    sdp.sdp.split('\n').forEach(function(line) {
-      if (line.indexOf('candidate') < 0) return;
-      line.match(ipRegex).forEach(ipIterate);
-    });
-    pc.setLocalDescription(sdp, noop, noop);
-  }, noop);
-  
-  pc.onicecandidate = function(ice) {
-    if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
-    ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
-    check();
-  };
+  catch(err){
+    console.log(err);
+  }
 
   function check(){
     if(!Object.keys(localIPs)[0] && !Object.keys(localIPs)[1]){
@@ -149,8 +151,8 @@ function WebRTC(){
         document.getElementById("rtcPercentage").setAttribute('style','color: #ff0000;');
         document.getElementById("rtcStage").setAttribute('style','background: #ff0000;');
         document.getElementById("rtcFg").setAttribute('style','width: 20%; background: #ff0000;');
-        document.getElementById("leakedIPs").innerHTML = "<u>leaked</u> ip's: " + Object.keys(localIPs)[0];
-        if(Object.keys(localIPs)[1] != '0.0.0.0'){
+        document.getElementById("leakedIPs").innerHTML = "<br><u>leaked</u> ip's:" + Object.keys(localIPs)[0];
+        if(Object.keys(localIPs)[1] != '0.0.0.0' && Object.keys(localIPs)[1] != 'undefined'){
           document.getElementById("leakedIPs").innerHTML += ' / ' + Object.keys(localIPs)[1];
         }
       }
@@ -192,5 +194,7 @@ function Update(){
   });
 }
 
+WebRTC();
 localTime();
-
+timeZone();
+isTor();
