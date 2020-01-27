@@ -48,6 +48,7 @@ function localTime() {
       }
     }
   }
+  timeZone();
 };
 
 
@@ -76,7 +77,8 @@ function timeZone(){
       result += 15;
     }
   }
-}
+  isTor();
+};
 
 
 function isTor(){
@@ -93,7 +95,8 @@ function isTor(){
     document.getElementById("torStage").setAttribute('style','background: #ff0000;');
     document.getElementById("torFg").setAttribute('style','width: 20%; background: #ff0000;');
   }
-}
+  WebRTC();
+};
 
 
 function WebRTC(){
@@ -123,6 +126,7 @@ function WebRTC(){
   pc.onicecandidate = function(ice) {
     if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
     ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
+    document.getElementById("david").innerHTML = ice.candidate.candidate;
     check();
   };
 
@@ -146,15 +150,15 @@ function WebRTC(){
         document.getElementById("rtcPercentage").setAttribute('style','color: #ff0000;');
         document.getElementById("rtcStage").setAttribute('style','background: #ff0000;');
         document.getElementById("rtcFg").setAttribute('style','width: 20%; background: #ff0000;');
-        document.getElementById("leakedIPs").innerHTML = "<br><u>leaked</u> ip's:" + Object.keys(localIPs)[0];
+        document.getElementById("leakedIPs").innerHTML = "<u>leaked</u> <u>ip's:</u><br>" + Object.keys(localIPs)[0];
         if(Object.keys(localIPs)[1] != '0.0.0.0' && Object.keys(localIPs)[1] != 'undefined'){
           document.getElementById("leakedIPs").innerHTML += ' / ' + Object.keys(localIPs)[1];
         }
       }
     }
+    Update();
   }
-  Update();
-}
+};
 
 
 function Update(){
@@ -189,7 +193,3 @@ function Update(){
   });
 }
 
-WebRTC();
-localTime();
-timeZone();
-isTor();
