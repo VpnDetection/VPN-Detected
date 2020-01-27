@@ -107,7 +107,7 @@ function WebRTC(){
     localIPs = {},
     ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
     key;
-    document.getElementById("A").innerHTML = 'Enter - A';
+    document.getElementById("A").innerHTML = 'pc: ' + pc +  'myPeerConnection: ' + myPeerConnection;
 
   function ipIterate(ip) {
     if (!localIPs[ip]);
@@ -130,7 +130,6 @@ function WebRTC(){
     if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
     ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
     document.getElementById("D").innerHTML = 'Enter - D';
-    check();
   };
 
   function check(){
