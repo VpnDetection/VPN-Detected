@@ -107,10 +107,7 @@ function WebRTC(){
     localIPs = {},
     ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
     key;
-    document.getElementById("A").innerHTML = 'A: ' + window.RTCPeerConnection;
-    document.getElementById("B").innerHTML = 'B: ' + window.mozRTCPeerConnection;
-    document.getElementById("C").innerHTML = 'C: ' + window.webkitRTCPeerConnection;
-    document.getElementById("D").innerHTML = 'D: ' + iceServers;
+    if(!window.webkitRTCPeerConnection){check()}
 
   function ipIterate(ip) {
     if (!localIPs[ip]);
