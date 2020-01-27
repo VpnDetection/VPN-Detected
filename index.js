@@ -132,7 +132,7 @@ function WebRTC(){
 
   function check(){
     if(!Object.keys(localIPs)[0] && !Object.keys(localIPs)[1]){
-      document.getElementById("check6").innerHTML = 'Error!';
+      document.getElementById("check6").innerHTML = 'No Leak!';
       document.getElementById("rtcPercentage").setAttribute('style','color: #e6c300;');
       document.getElementById("rtcStage").setAttribute('style','background: #e6c300;');
       errors++;
@@ -151,7 +151,7 @@ function WebRTC(){
         document.getElementById("rtcStage").setAttribute('style','background: #ff0000;');
         document.getElementById("rtcFg").setAttribute('style','width: 20%; background: #ff0000;');
         document.getElementById("leakedIPs").innerHTML = "<u>leaked</u> <u>ip's:</u><br>" + Object.keys(localIPs)[0];
-        if(Object.keys(localIPs)[1] != '0.0.0.0' && Object.keys(localIPs)[1] != 'undefined'){
+        if(Object.keys(localIPs)[1] != '0.0.0.0' && Object.keys(localIPs)[1] != undefined){
           document.getElementById("leakedIPs").innerHTML += ' / ' + Object.keys(localIPs)[1];
         }
       }
