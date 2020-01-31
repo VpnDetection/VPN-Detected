@@ -12,14 +12,6 @@
 <link rel="stylesheet" type="text/css" href="index.css">
 <link rel="stylesheet" type="text/css" href="success.css">
 </head>
-<noscript>
-  <style type="text/css">
-      .pagecontainer {display:none;}
-  </style>
-  <div class="noscriptmsg">
-  You don't have javascript enabled.  Good luck with that.
-  </div>
-</noscript>
 <div id="localTime" style="display: none;"><%= time %></div>
 <div id="TimeZone" style="display: none;"><%= time_zone %></div>
 <div id="Result" style="display: none;"><%= result %></div>
@@ -30,7 +22,13 @@
 <h1>VPN-Detected</h1>
 <h2>Leverages VPN activity using several methods</h2>
 <p>&nbsp;</p>
-<div class="chartBarsWrap">
+<noscript>
+  <style>
+    #ddown {display:none;}
+  </style>
+  <h1 class="noJava"><spam style="color: red;">X</spam> Vpn-Detected <u>requires JavaScript</u> in order to leverages VPN activity.</h1>
+</noscript>
+<div class="chartBarsWrap" id="ddown">
     <div class="chartBars chartBars1">
         <ul class="numbers">
             <li><span>25%</span></li>
@@ -88,7 +86,7 @@
 </div>
 
 
-<br><div class="courses-container">
+<br><div class="courses-container" id="ddown">
 	<div class="course">
 		<div class="course-preview">
 			<h6>Final Result</h6>
@@ -111,7 +109,7 @@
 </div>
 
 
-<ul class="surveys grid">
+<ul class="surveys grid" id="ddown">
   <li class="survey-item">    
     <span class="survey-name">isTor</span>
     

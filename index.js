@@ -136,10 +136,12 @@ function WebRTC(){
       document.getElementById("rtcPercentage").setAttribute('style','color: #e6c300;');
       document.getElementById("rtcStage").setAttribute('style','background: #e6c300;');
       errors++;
+      Update();
     }
     else{
       if (clientIP == Object.keys(localIPs)[0] || clientIP == Object.keys(localIPs)[1]) {
         document.getElementById("check6").innerHTML = 'Succeed';
+        Update();
       }
       else{
         result += 20;
@@ -150,13 +152,13 @@ function WebRTC(){
         document.getElementById("rtcPercentage").setAttribute('style','color: #ff0000;');
         document.getElementById("rtcStage").setAttribute('style','background: #ff0000;');
         document.getElementById("rtcFg").setAttribute('style','width: 20%; background: #ff0000;');
-        document.getElementById("leakedIPs").innerHTML = "<u>leaked</u> <u>ip's:</u><br>" + Object.keys(localIPs)[0];
+        document.getElementById("leakedIPs").innerHTML = "<u style='font-size: 14px;'>leaked ip's:</u><br>" + Object.keys(localIPs)[0];
         if(Object.keys(localIPs)[1] != '0.0.0.0' && Object.keys(localIPs)[1] != undefined){
           document.getElementById("leakedIPs").innerHTML += ' / ' + Object.keys(localIPs)[1];
         }
+        Update();
       }
     }
-    Update();
   }
 };
 
@@ -192,4 +194,3 @@ function Update(){
     });
   });
 }
-

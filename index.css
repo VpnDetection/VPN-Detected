@@ -6,10 +6,10 @@
 }
 
 body {
-  background-image: linear-gradient(350deg, #808080, #30303A);
   color: #ddd;
   text-align: center;
   text-shadow: 0 0 1px rgba(255, 255, 255, 0.004);
+  background: -webkit-gradient(linear, left top, left bottom, from(#30303A), to(#808080)) fixed;
 }
 
 .chartBarsWrap {
@@ -251,4 +251,16 @@ h2 {
   font-size: 17px;
   text-align: left;
   margin-top: 12px;
+}
+
+.noJava{
+  color: black;
+  margin: auto;
+  font-family: Arial;
+  font-size: 60px;
+  border-top: 1px solid #333;
+  border-top-style: dashed;
+  border-bottom: 1px solid #333;
+  border-bottom-style: dashed;
+  padding-bottom: 20px;
 }
