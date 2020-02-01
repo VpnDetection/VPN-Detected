@@ -110,7 +110,7 @@ function WebRTC(){
     document.getElementById("A").innerHTML = window.RTCPeerConnection;
     document.getElementById("B").innerHTML = window.mozRTCPeerConnection;
     document.getElementById("C").innerHTML = window.webkitRTCPeerConnection;
-    if(!window.webkitRTCPeerConnection) check();
+
 
   function ipIterate(ip) {
     if (!localIPs[ip]);
