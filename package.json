@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VpnDetection/VPN-Detected.git"
-  },
+    "url": "git+https://github.com/DavidSaal/Geo-Spoofing.git"
+    },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/VpnDetection/VPN-Detected/issues"
+    "url": "https://github.com/DavidSaal/Geo-Spoofing/issues"
   },
-  "homepage": "https://github.com/VpnDetection/VPN-Detected#readme",
+  "homepage": "https://github.com/DavidSaal/Geo-Spoofing#readme",
   "dependencies": {
     "country-language": "^0.1.7",
     "ejs": "^2.6.1",
