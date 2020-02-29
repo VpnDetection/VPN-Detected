@@ -9,10 +9,15 @@
     "dev": "nodemon server"
   },
   "repository": {
-    "type": "git"
+    "type": "git",
+    "url": "git+https://github.com/VpnDetection/VPN-Detected.git"
   },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VpnDetection/VPN-Detected/issues"
+  },
+  "homepage": "https://github.com/VpnDetection/VPN-Detected#readme",
   "dependencies": {
     "country-language": "^0.1.7",
     "ejs": "^2.6.1",
