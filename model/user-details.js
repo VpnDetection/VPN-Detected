@@ -38,7 +38,7 @@ module.exports = class User {
     }
 
     setIp(ip){
-        this.ip=ip;
+        this.ipClient=ip;
     }
     setAcceptLanguage(acceptLanguage){
         this.accept_language = acceptLanguage;
@@ -54,7 +54,7 @@ module.exports = class User {
 
 
     getIp(ip){
-        return this.ip;
+        return this.ipClient;
     }
     getResultObject(){
         return this.resultObject;
