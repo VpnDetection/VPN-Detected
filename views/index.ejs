@@ -12,11 +12,11 @@
 <link rel="stylesheet" type="text/css" href="index.css">
 <link rel="stylesheet" type="text/css" href="success.css">
 </head>
-<div id="localTime" style="display: none;"><%= time %></div>
-<div id="TimeZone" style="display: none;"><%= time_zone %></div>
-<div id="Result" style="display: none;"><%= result %></div>
-<div id="Counter" style="display: none;"><%= counter %></div>
-<div id="Errors" style="display: none;"><%= errors %></div>
+<div id="localTime" style="display: none;"><%= userDetails.getTime() %></div>
+<div id="TimeZone" style="display: none;"><%= userDetails.getTimeZone() %></div>
+<div id="Result" style="display: none;"><%= userDetails.getResultObject().getResult() %></div>
+<div id="Counter" style="display: none;"><%= userDetails.getResultObject().getCounter() %></div>
+<div id="Errors" style="display: none;"><%= userDetails.getResultObject().getError() %></div>
 <body onload="localTime()"></body>
 <body>
 <h1>VPN-Detected</h1>
@@ -42,7 +42,7 @@
             <li>
                 <span class="tooltip">
                 <span class="tooltipContent">Check 'Host' IP header field is belongs to VPN or not.</span>
-                <div data-percentage="<%= percentage1 %>" class="bar greenBar trigger"></div>
+                <div data-percentage="<%= userDetails.getResultObject().getPercentTage1() %>" class="bar greenBar trigger"></div>
                 </span>
                 <b>'Host' Field</b>
             </li>
@@ -63,7 +63,7 @@
             <li>
                 <span class="tooltip">
                 <span class="tooltipContent">Check if client accepted languages is equal to his country languages.</span>
-                <div data-percentage="<%= percentage4 %>" class="bar purpleBar trigger"></div>
+                <div data-percentage="<%= userDetails.getResultObject().getPercentTage4() %>" class="bar purpleBar trigger"></div>
                 </span>
                 <b>Languages</b>
             </li>
@@ -99,10 +99,10 @@
         <span class="progress-text" id='count'></span>
         <span class="progress-text">/ 6 Functions</span>
       </div>
-      <h6 style='text-align: left; color: black; font-size: 14px;'>•isProxy: <%= isProxy %></h1>
-      <h6 style='text-align: left; color: black; font-size: 14px;'>•isTor: <%= isTor %></h6>
-      <h6 style='text-align: left; color: black; font-size: 14px;'>•isVpn: <%= isVpn %></h6>
-      <h6 style='text-align: left; color: black; font-size: 14px;'>•isCrawler: <%= isCrawler %></h6>
+      <h6 style='text-align: left; color: black; font-size: 14px;'>•isProxy: <%= userDetails.getResultObject().getIsProxy() %></h1>
+      <h6 style='text-align: left; color: black; font-size: 14px;'>•isTor: <%= userDetails.getResultObject().getIsTor() %></h6>
+      <h6 style='text-align: left; color: black; font-size: 14px;'>•isVpn: <%= userDetails.getResultObject().getIsVpn() %></h6>
+      <h6 style='text-align: left; color: black; font-size: 14px;'>•isCrawler: <%= userDetails.getResultObject().getIsCrawler() %></h6>
 			<h2 style='float: left; color: black;'>VPN-Detected Result:&nbsp;</h2><p class="using" id='using'></p>
 		</div>
 	</div>
@@ -158,20 +158,20 @@
 
       <span class="survey-progress">
         <span class="survey-progress-bg">
-          <span class="survey-progress-fg" style="width: <%= percentage1 %>%; background: <%= hostColor %>;"></span>
+          <span class="survey-progress-fg" style="width: <%= userDetails.getResultObject().getPercentTage1() %>%; background: <%= userDetails.getResultObject().getHostColor() %>;"></span>
         </span>
         
         <span class="survey-progress-labels">
-          <span class="survey-progress-label" style='color: <%= hostColor %>;'><%= percentage1 %>%</span>
+          <span class="survey-progress-label" style='color: <%= userDetails.getResultObject().getHostColor() %>;'><%= userDetails.getResultObject().getPercentTage1() %>%</span>
 
-          <span class="survey-completes"><%= check1 %></span>
+          <span class="survey-completes"><%= userDetails.getResultObject().getCheck1() %></span>
         </span>
       </span>
       
        <span class="survey-end-date">
         Check 'Host' IP header field is belongs to VPN or not.
         </span>
-        <span class="survey-stage" style="background: <%= hostColor %>;"></span>
+        <span class="survey-stage" style="background: <%= userDetails.getResultObject().getHostColor() %>;"></span>
   </li>
   <br>
 
@@ -181,20 +181,20 @@
 
       <span class="survey-progress">
         <span class="survey-progress-bg">
-          <span class="survey-progress-fg" style="width: <%= percentage4 %>%; background: <%= langColor %>;"></span>
+          <span class="survey-progress-fg" style="width: <%= userDetails.getResultObject().getPercentTage4() %>%; background: <%= userDetails.getResultObject().getLangColor()  %>;"></span>
         </span>
         
         <span class="survey-progress-labels">
-          <span class="survey-progress-label" style='color: <%= langColor %>;'><%= percentage4 %>%</span>
+          <span class="survey-progress-label" style='color: <%= userDetails.getResultObject().getLangColor()  %>;'><%= userDetails.getResultObject().getPercentTage4() %>%</span>
 
-          <span class="survey-completes"><%= check4 %></span>
+          <span class="survey-completes"><%= userDetails.getResultObject().getCheck4()  %></span>
         </span>
       </span>
       
        <span class="survey-end-date">
         Check if client accepted languages is equal to his country languages.
         </span>
-        <span class="survey-stage" style="background: <%= langColor %>;"></span>
+        <span class="survey-stage" style="background: <%= userDetails.getResultObject().getLangColor() %>;"></span>
   </li>
 
 
@@ -242,13 +242,13 @@
   </li>
   <br>
   <li class="survey-item" style="border-radius: 8px;">ip:
-    <span class="survey-name" style="display:inline" id="clientIP"><%= ipClient %></span>
+    <span class="survey-name" style="display:inline" id="clientIP"><%= userDetails.getIp()%></span>
     <span class="survey-name" id="leakedIPs"></span>
 
        <span class="survey-end-date">
         <u>Sys Date</u>:  <span id="date"></span><br>
-        <u>Country ip</u>: <b><%= country %></b>&nbsp;<img class='country__flag' src="<%= flag %>" /><br>
-        <u>Time Zone</u>: <b><%= time_zone %></b>
+        <u>Country ip</u>: <b><%= userDetails.getCountry() %></b>&nbsp;<img class='country__flag' src="<%= userDetails.getResultObject().getFlag() %>" /><br>
+        <u>Time Zone</u>: <b><%= userDetails.getTimeZone() %></b>
         </span>
   </li>
 

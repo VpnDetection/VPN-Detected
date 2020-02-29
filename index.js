@@ -95,11 +95,22 @@ function isTor(){
     document.getElementById("torStage").setAttribute('style','background: #ff0000;');
     document.getElementById("torFg").setAttribute('style','width: 20%; background: #ff0000;');
   }
-  WebRTC();
+  try{
+      WebRTC();
+  }
+  catch(error){
+    console.log(error);
+    document.getElementById("check6").innerHTML = 'Error';
+    document.getElementById("rtcPercentage").setAttribute('style','color: #e6c300;');
+    document.getElementById("rtcStage").setAttribute('style','background: #e6c300;');
+    errors++;
+    Update();
+  }
 };
 
 
-function WebRTC(){
+function WebRTC() {
+
   var clientIP = document.getElementById("clientIP").innerHTML;
   var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
   var pc = new myPeerConnection({iceServers: [{urls: "stun:stun.l.google.com:19302"}]}),
@@ -107,7 +118,9 @@ function WebRTC(){
     localIPs = {},
     ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
     key;
-    if(!window.webkitRTCPeerConnection) check();
+    if(!window.webkitRTCPeerConnection){
+     check();
+    }  
 
   function ipIterate(ip) {
     if (!localIPs[ip]);
@@ -123,13 +136,13 @@ function WebRTC(){
     });
     pc.setLocalDescription(sdp, noop, noop);
   }, noop);
-  
+
   pc.onicecandidate = function(ice) {
     if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
     ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
     check()
   };
-
+  
   function check(){
     if(!Object.keys(localIPs)[0] && !Object.keys(localIPs)[1]){
       document.getElementById("check6").innerHTML = 'No Leak!';
