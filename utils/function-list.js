@@ -14,7 +14,6 @@ const userDetails = new User();
 //Entering user data 
 router.use('/',(req,res,next)=>{
     console.log('Entering user data ');
-    userDetails = isObjExists(userDetails,req);
     userDetails.setUpdateUserData(req);
     next();
 });

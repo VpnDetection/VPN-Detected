@@ -33,7 +33,7 @@ module.exports = class User {
         this.country = geoIp.lookup(this.ipClient)['country'];
         this.time_zone = geoIp.lookup(this.ipClient)['timezone'];
         this.fullCountry = countryLanguage.getCountry(this.country).name;
-        
+        this.resultObject = new Result();
 
     }
 
@@ -85,15 +85,6 @@ module.exports = class User {
     }
     getTime(){
         return this.time;
-    }
-    static isObjExists(userDetails,req){
-        if(userDetails.getIp()===req.header('x-forwarded-for')){
-            userDetails.setResetResult();
-            return userDetails;
-        }
-        else{
-            return new User();
-        }
     }
  
 }
