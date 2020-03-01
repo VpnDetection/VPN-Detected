@@ -33,7 +33,7 @@ module.exports = class User {
         this.country = geoIp.lookup(this.ipClient)['country'];
         this.time_zone = geoIp.lookup(this.ipClient)['timezone'];
         this.fullCountry = countryLanguage.getCountry(this.country).name;
-        this.resultObject = new Result();
+        
 
     }
 
@@ -50,6 +50,10 @@ module.exports = class User {
 
     setTime(time){
         this.time = time;
+    }
+    setRestResult(){
+          this.resultObject = new Result();
+
     }
 
 
@@ -82,27 +86,14 @@ module.exports = class User {
     getTime(){
         return this.time;
     }
-
-
-
-
-    /*
-    what kind informetion i need to save: 
-        ip = 
-        country =
-        accept_language =  
-        result = 
-        time = 
-        time_zone = 
-        flag = 
-        errors = 
-        fullCountry = 
-        answer = 
-        ans=
-        counter = 
-        hostColor = 
-        langColor =  
-        */
-
-
+    static isObjExists(userDetails,req){
+        if(userDetails.getIp()===req.header('x-forwarded-for')){
+            userDetails.setResetResult();
+            return userDetails;
+        }
+        else{
+            return new User();
+        }
+    }
+ 
 }
