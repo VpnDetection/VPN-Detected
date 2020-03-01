@@ -74,7 +74,7 @@ module.exports = class User {
     }
 
     getTimeZone(){
-        return this.timezone;
+        return this.time_zone;
     }
     getAnswer(){
         return this.answer;
