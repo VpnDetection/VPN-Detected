@@ -6,13 +6,13 @@ const countryLanguage = require('country-language');
 
 const User = require('../model/user-details');
 
-const userDetails = new User();
 
 const router = express.Router();
 
 
 //Entering user data 
 router.use('/',(req,res,next)=>{
+    const userDetails = new User();
     console.log('Entering user data ');
     userDetails.setUpdateUserData(req);
     next();
