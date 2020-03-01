@@ -33,7 +33,7 @@ module.exports = class User {
         this.country = geoIp.lookup(this.ipClient)['country'];
         this.time_zone = geoIp.lookup(this.ipClient)['timezone'];
         this.fullCountry = countryLanguage.getCountry(this.country).name;
-
+        this.resultObject = new Result();
 
     }
 
