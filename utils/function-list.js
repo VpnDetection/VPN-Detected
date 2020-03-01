@@ -9,10 +9,10 @@ const User = require('../model/user-details');
 
 const router = express.Router();
 
+const userDetails = new User();
 
 //Entering user data 
 router.use('/',(req,res,next)=>{
-    const userDetails = new User();
     console.log('Entering user data ');
     userDetails.setUpdateUserData(req);
     next();
