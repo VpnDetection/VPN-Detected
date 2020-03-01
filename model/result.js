@@ -79,7 +79,7 @@ module.exports = class Result {
     }
     
     getFlag(){
-        return this.falg;
+        return this.flag;
     }
 
     getCheck4(){
