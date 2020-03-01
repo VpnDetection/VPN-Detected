@@ -198,7 +198,7 @@ router.use((req,res,next)=>{
     console.log('finish Country_Language function');
 
     let flag = 'https://www.countryflags.io/' + country + '/shiny/24.png';
-    console.log('this is the flag verb');
+    console.log(`this is the flag verb ${flag}`);
     userDetails.getResultObject().setFlag(flag);
     userDetails.setTime(time);
     });
